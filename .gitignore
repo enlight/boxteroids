@@ -181,3 +181,7 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+Boxteroids.sln
+Intermediate/ProjectFiles/Boxteroids.vcxproj
+Intermediate/ProjectFiles/Boxteroids.vcxproj.filters
+Intermediate/
