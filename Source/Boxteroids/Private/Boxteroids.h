@@ -31,6 +31,7 @@
 // Only place includes here that are needed by the majority of the .cpp files in this module.
 
 #include "EngineMinimal.h"
+#include "UMG.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBoxteroids, Log, All);
 

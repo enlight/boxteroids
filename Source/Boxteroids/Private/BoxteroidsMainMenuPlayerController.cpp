@@ -35,10 +35,19 @@ void ABoxteroidsMainMenuPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	
-	// TODO: create & show menu widget
+	// the CreateWidget() variant that takes a player controller doesn't seem to work here, for
+	// whatever reason this controller doesn't seem to have a player set at this point 
+	_mainMenuWidget = CreateWidget<UUserWidget>(GetWorld(), MainMenuWidgetType);
+	_mainMenuWidget->AddToViewport();
 }
 
 void ABoxteroidsMainMenuPlayerController::EndPlay(const EEndPlayReason::Type endPlayReason)
 {
-	// TODO: release reference to menu widget
+	// release the reference to menu widget
+	auto menuWidget = _mainMenuWidget.Get();
+	if (menuWidget)
+	{
+		menuWidget->RemoveFromViewport();
+		_mainMenuWidget.Reset();
+	}
 }

@@ -29,7 +29,8 @@
 ABoxteroidsMainMenuGameMode::ABoxteroidsMainMenuGameMode(const FPostConstructInitializeProperties& PCIP) 
 	: Super(PCIP)
 {
-	PlayerControllerClass = ABoxteroidsMainMenuPlayerController::StaticClass();
+	// TODO: The player controller is set in a BP subclassed from this class, so this constructor 
+	// can be removed when upgrading to UE 4.6 since it does nothing
 }
 
 void ABoxteroidsMainMenuGameMode::RestartPlayer(AController* newPlayer)

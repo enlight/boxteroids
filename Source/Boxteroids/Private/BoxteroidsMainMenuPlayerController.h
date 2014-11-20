@@ -25,12 +25,21 @@
 
 #include "BoxteroidsMainMenuPlayerController.generated.h"
 
+class UUserWidget;
+
 UCLASS()
 class ABoxteroidsMainMenuPlayerController : public APlayerController
 {
 	GENERATED_UCLASS_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, Category=UI)
+	TSubclassOf<UUserWidget> MainMenuWidgetType;
+
+public:
 	virtual void PostInitializeComponents() override;
 	virtual void EndPlay(const EEndPlayReason::Type endPlayReason) override;
+
+private:
+	TWeakObjectPtr<UUserWidget> _mainMenuWidget;
 };
