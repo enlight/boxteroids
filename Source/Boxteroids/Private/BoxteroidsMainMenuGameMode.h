@@ -33,7 +33,9 @@ class ABoxteroidsMainMenuGameMode : public AGameMode
 	GENERATED_UCLASS_BODY()
 
 public:
+	virtual void GenericPlayerInitialization(AController* controller) override;
 	virtual void RestartPlayer(class AController* newPlayer) override;
+	virtual void Logout(AController* controller) override;
 
 };
 

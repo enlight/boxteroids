@@ -37,9 +37,10 @@ public:
 	TSubclassOf<UUserWidget> MainMenuWidgetType;
 
 public:
-	virtual void PostInitializeComponents() override;
-	virtual void EndPlay(const EEndPlayReason::Type endPlayReason) override;
+	void ShowMainMenu();
+	void HideMainMenu();
 
 private:
-	TWeakObjectPtr<UUserWidget> _mainMenuWidget;
+	UPROPERTY(Transient)
+	UUserWidget* _mainMenuWidget;
 };

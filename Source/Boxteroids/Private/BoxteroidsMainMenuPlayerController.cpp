@@ -31,23 +31,26 @@ ABoxteroidsMainMenuPlayerController::ABoxteroidsMainMenuPlayerController(const F
 	// TODO: Remove when upgrading to 4.6 since it's not needed
 }
 
-void ABoxteroidsMainMenuPlayerController::PostInitializeComponents()
+void ABoxteroidsMainMenuPlayerController::ShowMainMenu()
 {
-	Super::PostInitializeComponents();
-	
-	// the CreateWidget() variant that takes a player controller doesn't seem to work here, for
-	// whatever reason this controller doesn't seem to have a player set at this point 
-	_mainMenuWidget = CreateWidget<UUserWidget>(GetWorld(), MainMenuWidgetType);
-	_mainMenuWidget->AddToViewport();
+	// CreateWidget() expects the local player to be set for this player controller
+	auto localPlayer = Cast<ULocalPlayer>(Player);
+
+	if (!_mainMenuWidget && localPlayer)
+	{
+		_mainMenuWidget = CreateWidget<UUserWidget>(this, MainMenuWidgetType);
+	}
+
+	if (_mainMenuWidget)
+	{
+		_mainMenuWidget->AddToViewport();
+	}
 }
 
-void ABoxteroidsMainMenuPlayerController::EndPlay(const EEndPlayReason::Type endPlayReason)
+void ABoxteroidsMainMenuPlayerController::HideMainMenu()
 {
-	// release the reference to menu widget
-	auto menuWidget = _mainMenuWidget.Get();
-	if (menuWidget)
+	if (_mainMenuWidget)
 	{
-		menuWidget->RemoveFromViewport();
-		_mainMenuWidget.Reset();
+		_mainMenuWidget->RemoveFromViewport();
 	}
 }

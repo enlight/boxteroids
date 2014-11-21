@@ -33,7 +33,29 @@ ABoxteroidsMainMenuGameMode::ABoxteroidsMainMenuGameMode(const FPostConstructIni
 	// can be removed when upgrading to UE 4.6 since it does nothing
 }
 
+void ABoxteroidsMainMenuGameMode::GenericPlayerInitialization(AController* controller)
+{
+	Super::GenericPlayerInitialization(controller);
+
+	auto playerController = Cast<ABoxteroidsMainMenuPlayerController>(controller);
+	if (playerController)
+	{
+		playerController->ShowMainMenu();
+	}
+}
+
 void ABoxteroidsMainMenuGameMode::RestartPlayer(AController* newPlayer)
 {
 	// do nothing
+}
+
+void ABoxteroidsMainMenuGameMode::Logout(AController* controller)
+{
+	auto playerController = Cast<ABoxteroidsMainMenuPlayerController>(controller);
+	if (playerController)
+	{
+		playerController->HideMainMenu();
+	}
+
+	Super::Logout(controller);
 }
