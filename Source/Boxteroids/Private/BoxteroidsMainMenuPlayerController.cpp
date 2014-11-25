@@ -25,12 +25,6 @@
 #include "Boxteroids.h"
 #include "BoxteroidsMainMenuPlayerController.h"
 
-ABoxteroidsMainMenuPlayerController::ABoxteroidsMainMenuPlayerController(const FPostConstructInitializeProperties& PCIP) 
-	: Super(PCIP)
-{
-	// TODO: Remove when upgrading to 4.6 since it's not needed
-}
-
 void ABoxteroidsMainMenuPlayerController::ShowMainMenu()
 {
 	// CreateWidget() expects the local player to be set for this player controller

@@ -27,10 +27,10 @@
 #include "BoxteroidsMainMenuGameMode.generated.h"
 
 
-UCLASS(minimalapi)
+UCLASS(MinimalAPI)
 class ABoxteroidsMainMenuGameMode : public AGameMode
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
 
 public:
 	virtual void GenericPlayerInitialization(AController* controller) override;

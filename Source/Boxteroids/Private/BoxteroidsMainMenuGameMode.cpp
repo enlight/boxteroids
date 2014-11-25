@@ -26,13 +26,6 @@
 #include "BoxteroidsMainMenuGameMode.h"
 #include "BoxteroidsMainMenuPlayerController.h"
 
-ABoxteroidsMainMenuGameMode::ABoxteroidsMainMenuGameMode(const FPostConstructInitializeProperties& PCIP) 
-	: Super(PCIP)
-{
-	// TODO: The player controller is set in a BP subclassed from this class, so this constructor 
-	// can be removed when upgrading to UE 4.6 since it does nothing
-}
-
 void ABoxteroidsMainMenuGameMode::GenericPlayerInitialization(AController* controller)
 {
 	Super::GenericPlayerInitialization(controller);

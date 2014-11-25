@@ -30,7 +30,7 @@ class UUserWidget;
 UCLASS()
 class ABoxteroidsMainMenuPlayerController : public APlayerController
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, Category=UI)
