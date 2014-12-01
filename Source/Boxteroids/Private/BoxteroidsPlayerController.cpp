@@ -40,6 +40,7 @@ void ABoxteroidsPlayerController::ShowInGameMenu()
 		_inGameMenuWidget->AddToViewport();
 		SetInputMode(FInputModeUIOnly());
 		SetPause(true);
+		bInGameMenuOpen = true;
 	}
 }
 
@@ -50,5 +51,27 @@ void ABoxteroidsPlayerController::HideInGameMenu()
 		_inGameMenuWidget->RemoveFromViewport();
 		SetInputMode(FInputModeGameOnly());
 		SetPause(false);
+		bInGameMenuOpen = false;
+	}
+}
+
+void ABoxteroidsPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	InputComponent->BindAction(
+		"InGameMenu", IE_Pressed, this, &ABoxteroidsPlayerController::OnToggleInGameMenu
+	);
+}
+
+void ABoxteroidsPlayerController::OnToggleInGameMenu()
+{
+	if (bInGameMenuOpen)
+	{
+		HideInGameMenu();
+	}
+	else
+	{
+		ShowInGameMenu();
 	}
 }

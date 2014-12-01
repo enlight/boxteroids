@@ -39,7 +39,15 @@ public:
 	void ShowInGameMenu();
 	void HideInGameMenu();
 	
+protected:
+	virtual void SetupInputComponent() override;
+
+private:
+	void OnToggleInGameMenu();
+
 private:
 	UPROPERTY(Transient)
 	UUserWidget* _inGameMenuWidget;
+
+	bool bInGameMenuOpen;
 };
