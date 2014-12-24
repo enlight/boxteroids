@@ -43,6 +43,10 @@ ABoxteroidsPawn::ABoxteroidsPawn(const FObjectInitializer& objectInitializer)
 
 	MovementComponent = 
 		objectInitializer.CreateDefaultSubobject<UFloatingPawnMovement>(this, TEXT("Movement"));
+	// the ship is only allowed to move along the x & y axes
+	MovementComponent->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::Z);
+	MovementComponent->bConstrainToPlane = true;
+	MovementComponent->bSnapToPlaneAtStart = true;
 	
 	// Weapon
 	GunOffset = FVector(90.f, 0.f, 0.f);
