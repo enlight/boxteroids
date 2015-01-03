@@ -45,6 +45,18 @@ void ABxtAsteroid::Tick(float deltaSeconds)
 {
 	Super::Tick(deltaSeconds);
 }
+
+void ABxtAsteroid::SetInitialSpeed(float initialSpeed)
+{
+	ProjectileMovementComponent->InitialSpeed = initialSpeed;
+	ProjectileMovementComponent->MaxSpeed = initialSpeed;
+}
+
+void ABxtAsteroid::SetDirection(const FVector& direction)
+{
+	ProjectileMovementComponent->Velocity = direction;
+}
+
 /*
 void ABxtAsteroid::ReceiveHit(
 	UPrimitiveComponent* myComp, AActor* otherActor, UPrimitiveComponent* otherComp, 

@@ -26,16 +26,37 @@
 #include "BxtAsteroidSpawner.generated.h"
 
 /**
- * @brief Spawns asteroids in the map it is placed in.
+ * Spawns asteroids in the map it is placed in.
  */
 UCLASS(Blueprintable)
-class ABxtAsteroidSpawner : public AInfo
+class ABxtAsteroidSpawner : public AVolume
 {
 	GENERATED_BODY()
+
+public:
+	/** Total number of asteroids that should be spawned in the map. */
+	UPROPERTY(Category = Spawner, EditAnywhere, BlueprintReadOnly)
+	int32 TotalAsteroidsToSpawn;
+
+	/** Number of seconds the spawner should wait before spawning each asteroid. */
+	UPROPERTY(Category = Spawner, EditAnywhere, BlueprintReadOnly)
+	float AsteroidSpawnDelay;
+
+	/** How fast asteroids should be moving when spawned. */
+	UPROPERTY(Category = Spawner, EditAnywhere, BlueprintReadOnly)
+	float AsteroidSpeed;
 
 public:
 	ABxtAsteroidSpawner(const FObjectInitializer& objectInitializer);
 
 public: // AActor interface
 	virtual void Tick(float deltaSeconds) override;
+
+private:
+	FVector GetRandomSpawnLocation();
+	void SpawnAsteroid();
+
+private:
+	int32 _numAsteroidsSpawned = 0;
+	float _lastSpawnTime = -1.0f;
 };

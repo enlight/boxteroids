@@ -24,14 +24,58 @@
 
 #include "Boxteroids.h"
 #include "BxtAsteroidSpawner.h"
+#include "BxtAsteroid.h"
 
 ABxtAsteroidSpawner::ABxtAsteroidSpawner(const FObjectInitializer& objectInitializer)
 	: Super(objectInitializer)
 {	
-	
+	PrimaryActorTick.bCanEverTick = true;
+
+	UBrushComponent* volume = GetBrushComponent();
+	if (volume)
+	{
+		volume->bGenerateOverlapEvents = false;
+	}
 }
 
 void ABxtAsteroidSpawner::Tick(float deltaSeconds)
 {
 	Super::Tick(deltaSeconds);
+
+	if (_numAsteroidsSpawned >= TotalAsteroidsToSpawn)
+	{
+		// already spawned all the asteroids we'll ever need
+		return;
+	}
+
+	float curTime = GetWorld()->GetTimeSeconds();
+	if ((-1.0f == _lastSpawnTime) || ((curTime - _lastSpawnTime) > AsteroidSpawnDelay))
+	{
+		SpawnAsteroid();
+
+		_lastSpawnTime = curTime;
+		++_numAsteroidsSpawned;
+	}
+}
+
+FVector ABxtAsteroidSpawner::GetRandomSpawnLocation()
+{
+	FBox spawnerBounds = GetComponentsBoundingBox(true);
+	float y = FMath::FRandRange(spawnerBounds.Min.Y, spawnerBounds.Max.Y);
+	return FVector(spawnerBounds.GetCenter().X, y, 0.0f);
+}
+
+void ABxtAsteroidSpawner::SpawnAsteroid()
+{
+	FActorSpawnParameters spawnParams;
+	spawnParams.Owner = this;
+	auto asteroid = GetWorld()->SpawnActor<ABxtAsteroid>(
+		GetRandomSpawnLocation(), FRotator::ZeroRotator, spawnParams
+	);
+
+	if (asteroid)
+	{
+		asteroid->SetInitialSpeed(AsteroidSpeed);
+		asteroid->SetDirection(FVector(-1.0f, 0.0f, 0.0f));
+	}
 }

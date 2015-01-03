@@ -37,13 +37,15 @@ private:
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly)
 	class UStaticMeshComponent* AsteroidMeshComponent;
 
-public:
 	/** Projectile movement component */
-	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovementComponent;
 
 public:
 	ABxtAsteroid(const FObjectInitializer& objectInitializer);
+
+	void SetInitialSpeed(float initialSpeed);
+	void SetDirection(const FVector& direction);
 
 public: // AActor interface
 	virtual void Tick(float deltaSeconds) override;
