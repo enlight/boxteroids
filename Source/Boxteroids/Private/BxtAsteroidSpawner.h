@@ -46,6 +46,10 @@ public:
 	UPROPERTY(Category = Spawner, EditAnywhere, BlueprintReadOnly)
 	float AsteroidSpeed;
 
+	/** The type of asteroid that should be spawned. */
+	UPROPERTY(Category = Spawner, EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<class ABxtAsteroid> AsteroidClass;
+
 public:
 	ABxtAsteroidSpawner(const FObjectInitializer& objectInitializer);
 

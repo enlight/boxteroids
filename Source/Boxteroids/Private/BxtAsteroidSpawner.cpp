@@ -62,7 +62,7 @@ FVector ABxtAsteroidSpawner::GetRandomSpawnLocation()
 {
 	FBox spawnerBounds = GetComponentsBoundingBox(true);
 	float y = FMath::FRandRange(spawnerBounds.Min.Y, spawnerBounds.Max.Y);
-	return FVector(spawnerBounds.GetCenter().X, y, 0.0f);
+	return FVector(spawnerBounds.GetCenter().X - 500.0f, y, 0.0f);
 }
 
 void ABxtAsteroidSpawner::SpawnAsteroid()
@@ -70,7 +70,7 @@ void ABxtAsteroidSpawner::SpawnAsteroid()
 	FActorSpawnParameters spawnParams;
 	spawnParams.Owner = this;
 	auto asteroid = GetWorld()->SpawnActor<ABxtAsteroid>(
-		GetRandomSpawnLocation(), FRotator::ZeroRotator, spawnParams
+		AsteroidClass, GetRandomSpawnLocation(), FRotator::ZeroRotator, spawnParams
 	);
 
 	if (asteroid)
