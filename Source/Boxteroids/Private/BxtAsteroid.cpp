@@ -39,6 +39,10 @@ ABxtAsteroid::ABxtAsteroid(const FObjectInitializer& objectInitializer)
 	ProjectileMovementComponent->bShouldBounce = true;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f; // not affected by gravity
 	ProjectileMovementComponent->bRotationFollowsVelocity = false;
+	ProjectileMovementComponent->bInitialVelocityInLocalSpace = false;
+	// constrain movement to the Z = 0 plane
+	ProjectileMovementComponent->bConstrainToPlane = true;
+	ProjectileMovementComponent->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::Z);
 }
 
 void ABxtAsteroid::Tick(float deltaSeconds)
