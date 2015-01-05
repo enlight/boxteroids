@@ -31,10 +31,12 @@ ABxtAsteroidSpawner::ABxtAsteroidSpawner(const FObjectInitializer& objectInitial
 {	
 	PrimaryActorTick.bCanEverTick = true;
 
-	UBrushComponent* volume = GetBrushComponent();
-	if (volume)
+	UBrushComponent* brushComponent = GetBrushComponent();
+	if (brushComponent)
 	{
-		volume->bGenerateOverlapEvents = false;
+		brushComponent->bGenerateOverlapEvents = false;
+		brushComponent->bAlwaysCreatePhysicsState = false;
+		brushComponent->SetCollisionProfileName("NoCollision");
 	}
 }
 
@@ -69,13 +71,24 @@ void ABxtAsteroidSpawner::SpawnAsteroid()
 {
 	FActorSpawnParameters spawnParams;
 	spawnParams.Owner = this;
+	spawnParams.bDeferConstruction = true;
+
+	const FVector spawnLocation = GetRandomSpawnLocation();
+	const FRotator spawnRotation = FRotator::ZeroRotator;
+
 	auto asteroid = GetWorld()->SpawnActor<ABxtAsteroid>(
-		AsteroidClass, GetRandomSpawnLocation(), FRotator::ZeroRotator, spawnParams
+		AsteroidClass, spawnLocation, spawnRotation, spawnParams
 	);
 
 	if (asteroid)
 	{
 		asteroid->SetInitialSpeed(AsteroidSpeed);
 		asteroid->SetDirection(FVector(-1.0f, 0.0f, 0.0f));
+
+		// preserve original root component scale
+		const FVector spawnScale = 
+			GetRootComponent() ? GetRootComponent()->RelativeScale3D : FVector(1.0f, 1.0f, 1.0f);
+
+		asteroid->FinishSpawning(FTransform(spawnRotation, spawnLocation, spawnScale), true);
 	}
 }
