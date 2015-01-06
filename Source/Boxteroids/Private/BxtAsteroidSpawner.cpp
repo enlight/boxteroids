@@ -60,11 +60,18 @@ void ABxtAsteroidSpawner::Tick(float deltaSeconds)
 	}
 }
 
-FVector ABxtAsteroidSpawner::GetRandomSpawnLocation()
+FVector ABxtAsteroidSpawner::GetRandomSpawnLocation() const
 {
-	FBox spawnerBounds = GetComponentsBoundingBox(true);
-	float y = FMath::FRandRange(spawnerBounds.Min.Y, spawnerBounds.Max.Y);
+	const FBox spawnerBounds = GetComponentsBoundingBox(true);
+	const float y = FMath::FRandRange(spawnerBounds.Min.Y, spawnerBounds.Max.Y);
 	return FVector(spawnerBounds.GetCenter().X - 500.0f, y, 0.0f);
+}
+
+FVector ABxtAsteroidSpawner::GetRandomSpawnDirection() const
+{
+	const FVector direction(-1.0f, 0.0, 0.0f);
+	const float angle = FMath::FRandRange(-45.0f, 45.0f);
+	return direction.RotateAngleAxis(angle, FVector(0.0f, 0.0f, 1.0f));
 }
 
 void ABxtAsteroidSpawner::SpawnAsteroid()
@@ -83,7 +90,7 @@ void ABxtAsteroidSpawner::SpawnAsteroid()
 	if (asteroid)
 	{
 		asteroid->SetInitialSpeed(AsteroidSpeed);
-		asteroid->SetDirection(FVector(-1.0f, 0.0f, 0.0f));
+		asteroid->SetDirection(GetRandomSpawnDirection());
 
 		// preserve original root component scale
 		const FVector spawnScale = 

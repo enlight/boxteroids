@@ -57,7 +57,8 @@ public: // AActor interface
 	virtual void Tick(float deltaSeconds) override;
 
 private:
-	FVector GetRandomSpawnLocation();
+	FVector GetRandomSpawnLocation() const;
+	FVector GetRandomSpawnDirection() const;
 	void SpawnAsteroid();
 
 private:
