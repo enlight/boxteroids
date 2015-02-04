@@ -55,6 +55,10 @@ public:
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 	class USoundBase* FireSound;
 
+	/** The type of projectile the spaceship should fire. */
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class ABxtProjectile> ProjectileType;
+
 public:
 	ABoxteroidsPawn(const FObjectInitializer& objectInitializer);
 
@@ -63,8 +67,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* inputComponent) override;
 	// End Actor Interface
 
-	/* Fire a shot in the specified direction */
-	void FireShot(FVector FireDirection);
+	/* Fire a shot */
+	void FireShot();
 
 	/* Handler for the fire timer expiry */
 	void ShotTimerExpired();
@@ -73,6 +77,7 @@ private:
 	// names for axis bindings
 	static const FName HeadingAxisName;
 	static const FName SideAxisName;
+	static const FName FireActionName;
 
 private:
 	/* Flag to control firing */

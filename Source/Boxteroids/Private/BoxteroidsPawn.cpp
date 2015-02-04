@@ -24,11 +24,12 @@
 
 #include "Boxteroids.h"
 #include "BoxteroidsPawn.h"
-//#include "BoxteroidsProjectile.h"
+#include "BxtProjectile.h"
 #include "TimerManager.h"
 
 const FName ABoxteroidsPawn::HeadingAxisName("MoveForward");
 const FName ABoxteroidsPawn::SideAxisName("MoveRight");
+const FName ABoxteroidsPawn::FireActionName("Fire");
 
 ABoxteroidsPawn::ABoxteroidsPawn(const FObjectInitializer& objectInitializer)
 	: Super(objectInitializer)
@@ -61,6 +62,7 @@ void ABoxteroidsPawn::SetupPlayerInputComponent(class UInputComponent* inputComp
 	// set up gameplay key bindings
 	InputComponent->BindAxis(HeadingAxisName);
 	InputComponent->BindAxis(SideAxisName);
+	InputComponent->BindAction(FireActionName, IE_Pressed, this, &ABoxteroidsPawn::FireShot);
 }
 
 void ABoxteroidsPawn::Tick(float DeltaSeconds)
@@ -88,8 +90,20 @@ void ABoxteroidsPawn::Tick(float DeltaSeconds)
 	}
 }
 
-void ABoxteroidsPawn::FireShot(FVector FireDirection)
+void ABoxteroidsPawn::FireShot()
 {
+	UWorld* world = GetWorld();
+	if (world)
+	{
+		const FRotator shipRotation = GetActorRotation();
+		const FVector projectilePos = GetActorLocation() + shipRotation.RotateVector(GunOffset);
+		auto projectile = world->SpawnActor<ABxtProjectile>(ProjectileType, projectilePos, shipRotation);
+		if (bCanFire)
+		{
+			bCanFire = false;
+		}
+	}
+
 	/*
 	// If we it's ok to fire again
 	if (bCanFire == true)
