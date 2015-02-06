@@ -69,6 +69,8 @@ void ABoxteroidsPawn::SetupPlayerInputComponent(class UInputComponent* inputComp
 
 void ABoxteroidsPawn::Tick(float deltaSeconds)
 {
+	Super::Tick(deltaSeconds);
+
 	const float headingValue = GetInputAxisValue(HeadingAxisName);
 	const float sideValue = GetInputAxisValue(SideAxisName);
 
