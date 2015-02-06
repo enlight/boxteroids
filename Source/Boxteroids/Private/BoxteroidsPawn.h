@@ -43,9 +43,9 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	FVector GunOffset;
 	
-	/* How fast the ship can fire. */
+	/* Delay (in seconds) between each shot. */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float FireRate;
+	float FiringDelay;
 
 	/* How fast the ship can turn. */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
@@ -63,15 +63,13 @@ public:
 	ABoxteroidsPawn(const FObjectInitializer& objectInitializer);
 
 	// Begin Actor Interface
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float deltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* inputComponent) override;
 	// End Actor Interface
 
-	/* Fire a shot */
-	void FireShot();
-
-	/* Handler for the fire timer expiry */
-	void ShotTimerExpired();
+private:
+	void StartFiring();
+	void StopFiring();
 
 private:
 	// names for axis bindings
@@ -80,7 +78,9 @@ private:
 	static const FName FireActionName;
 
 private:
-	/* Flag to control firing */
-	uint32 bCanFire : 1;
+	// true when the ship should be firing
+	uint32 _bShouldFire : 1;
+	// time (in seconds) when the ship last fired a shot
+	float _lastShotTime;
 };
 

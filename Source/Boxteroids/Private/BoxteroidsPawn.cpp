@@ -51,8 +51,9 @@ ABoxteroidsPawn::ABoxteroidsPawn(const FObjectInitializer& objectInitializer)
 	
 	// Weapon
 	GunOffset = FVector(90.f, 0.f, 0.f);
-	FireRate = 0.1f;
-	bCanFire = true;
+	FiringDelay = 0.5f;
+	_bShouldFire = false;
+	_lastShotTime = 0.0f;
 }
 
 void ABoxteroidsPawn::SetupPlayerInputComponent(class UInputComponent* inputComponent)
@@ -62,17 +63,18 @@ void ABoxteroidsPawn::SetupPlayerInputComponent(class UInputComponent* inputComp
 	// set up gameplay key bindings
 	InputComponent->BindAxis(HeadingAxisName);
 	InputComponent->BindAxis(SideAxisName);
-	InputComponent->BindAction(FireActionName, IE_Pressed, this, &ABoxteroidsPawn::FireShot);
+	InputComponent->BindAction(FireActionName, IE_Pressed, this, &ABoxteroidsPawn::StartFiring);
+	InputComponent->BindAction(FireActionName, IE_Released, this, &ABoxteroidsPawn::StopFiring);
 }
 
-void ABoxteroidsPawn::Tick(float DeltaSeconds)
+void ABoxteroidsPawn::Tick(float deltaSeconds)
 {
 	const float headingValue = GetInputAxisValue(HeadingAxisName);
 	const float sideValue = GetInputAxisValue(SideAxisName);
 
 	if (Controller)
 	{
-		float deltaYaw = TurnSpeed * sideValue * DeltaSeconds;
+		float deltaYaw = TurnSpeed * sideValue * deltaSeconds;
 		if (!FMath::IsNearlyZero(deltaYaw))
 		{
 			Controller->SetControlRotation(
@@ -88,57 +90,28 @@ void ABoxteroidsPawn::Tick(float DeltaSeconds)
 			);
 		}
 	}
-}
 
-void ABoxteroidsPawn::FireShot()
-{
 	UWorld* world = GetWorld();
-	if (world)
+	if (_bShouldFire && world)
 	{
-		const FRotator shipRotation = GetActorRotation();
-		const FVector projectilePos = GetActorLocation() + shipRotation.RotateVector(GunOffset);
-		auto projectile = world->SpawnActor<ABxtProjectile>(ProjectileType, projectilePos, shipRotation);
-		if (bCanFire)
+		float currentTime = world->GetTimeSeconds();
+		if ((currentTime - _lastShotTime) >= FiringDelay)
 		{
-			bCanFire = false;
+			const FRotator shipRotation = GetActorRotation();
+			const FVector projectilePos = GetActorLocation() + shipRotation.RotateVector(GunOffset);
+			auto projectile = world->SpawnActor<ABxtProjectile>(ProjectileType, projectilePos, shipRotation);
+			// UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+			_lastShotTime = currentTime;
 		}
 	}
-
-	/*
-	// If we it's ok to fire again
-	if (bCanFire == true)
-	{
-		// If we are pressing fire stick in a direction
-		if (FireDirection.SizeSquared() > 0.0f)
-		{
-			const FRotator FireRotation = FireDirection.Rotation();
-			// Spawn projectile at an offset from this pawn
-			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
-
-			UWorld* const World = GetWorld();
-			if (World != NULL)
-			{
-				// spawn the projectile
-				World->SpawnActor<ABoxteroidsProjectile>(SpawnLocation, FireRotation);
-			}
-
-			bCanFire = false;
-			World->GetTimerManager().SetTimer(this, &ABoxteroidsPawn::ShotTimerExpired, FireRate);
-
-			// try and play the sound if specified
-			if (FireSound != nullptr)
-			{
-				UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-			}
-
-			bCanFire = false;
-		}
-	}
-	*/
 }
 
-void ABoxteroidsPawn::ShotTimerExpired()
+void ABoxteroidsPawn::StartFiring()
 {
-	bCanFire = true;
+	_bShouldFire = true;
 }
 
+void ABoxteroidsPawn::StopFiring()
+{
+	_bShouldFire = false;
+}
