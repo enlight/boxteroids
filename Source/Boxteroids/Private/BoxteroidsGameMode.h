@@ -30,7 +30,15 @@
 UCLASS(MinimalAPI)
 class ABoxteroidsGameMode : public AGameMode
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, Category = Classes, meta = (DisplayName = "Player HUD Widget Class"))
+	TSubclassOf<class UUserWidget> PlayerHUDWidgetClass;
+
+public:
+	ABoxteroidsGameMode(const FObjectInitializer& objectInitializer);
+	virtual void StartNewPlayer(APlayerController* newPlayerController) override;
 };
 
 

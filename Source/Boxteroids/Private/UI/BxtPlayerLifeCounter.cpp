@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2014 Vadim Macagon
+// Copyright (c) 2015 Vadim Macagon
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,36 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //-------------------------------------------------------------------------------
+
 #include "Boxteroids.h"
-#include "BoxteroidsGameMode.h"
-//#include "BoxteroidsPawn.h"
-#include "BoxteroidsPlayerController.h"
+#include "GameFramework/PlayerController.h"
+#include "../BxtPlayerState.h"
+#include "BxtPlayerLifeCounter.h"
 
-ABoxteroidsGameMode::ABoxteroidsGameMode(const FObjectInitializer& objectInitializer) 
-	: Super(objectInitializer)
+FText UBxtPlayerLifeCounter::GetLivesLeft() const
 {
-	// set default pawn class to our character class
-	//DefaultPawnClass = ABoxteroidsPawn::StaticClass();
-	PlayerControllerClass = ABoxteroidsPlayerController::StaticClass();
-}
-
-void ABoxteroidsGameMode::StartNewPlayer(APlayerController* newPlayerController)
-{
-	// spawn UMG HUD
-	if (PlayerHUDWidgetClass)
-	{
-		auto localPlayer = Cast<ULocalPlayer>(newPlayerController->Player);
-
-		if (localPlayer)
-		{
-			auto hudWidget = CreateWidget<UUserWidget>(newPlayerController, PlayerHUDWidgetClass);
-
-			if (hudWidget)
-			{
-				hudWidget->AddToViewport();
-			}
-		}
-	}
-
-	Super::StartNewPlayer(newPlayerController);
+	auto* playerState = Cast<ABxtPlayerState>(GetOwningPlayer()->PlayerState);
+	return playerState ? 
+		FText::FromString(FString::FromInt(playerState->GetNumLivesLeft())) : FText();
 }

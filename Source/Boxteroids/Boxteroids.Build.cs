@@ -4,6 +4,8 @@ public class Boxteroids : ModuleRules
 {
     public Boxteroids(TargetInfo Target)
     {
+        PrivateIncludePaths.Add("Boxteroids/Private");
+
         PublicDependencyModuleNames.AddRange(
             new string[] 
             { 

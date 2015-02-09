@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2014 Vadim Macagon
+// Copyright (c) 2015 Vadim Macagon
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,36 +21,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //-------------------------------------------------------------------------------
-#include "Boxteroids.h"
-#include "BoxteroidsGameMode.h"
-//#include "BoxteroidsPawn.h"
-#include "BoxteroidsPlayerController.h"
+#pragma once
 
-ABoxteroidsGameMode::ABoxteroidsGameMode(const FObjectInitializer& objectInitializer) 
-	: Super(objectInitializer)
+#include "Blueprint/UserWidget.h"
+#include "BxtPlayerLifeCounter.generated.h"
+
+/**
+ * Base class for a UMG widget that displays the number of lives the player has remaining.
+ * 
+ * This class provides native event handlers that must be bound in a derived Widget Blueprint via
+ * the UMG designer. In UE 4.6 one must create a wrapper function in the Widget Blueprint that
+ * calls the native function, hopefully this will be simplified one day.
+ */
+UCLASS(Abstract)
+class UBxtPlayerLifeCounter : public UUserWidget
 {
-	// set default pawn class to our character class
-	//DefaultPawnClass = ABoxteroidsPawn::StaticClass();
-	PlayerControllerClass = ABoxteroidsPlayerController::StaticClass();
-}
+	GENERATED_BODY()
 
-void ABoxteroidsGameMode::StartNewPlayer(APlayerController* newPlayerController)
-{
-	// spawn UMG HUD
-	if (PlayerHUDWidgetClass)
-	{
-		auto localPlayer = Cast<ULocalPlayer>(newPlayerController->Player);
-
-		if (localPlayer)
-		{
-			auto hudWidget = CreateWidget<UUserWidget>(newPlayerController, PlayerHUDWidgetClass);
-
-			if (hudWidget)
-			{
-				hudWidget->AddToViewport();
-			}
-		}
-	}
-
-	Super::StartNewPlayer(newPlayerController);
-}
+public:
+	/* Get a string that indicates the number of lives a player has remaining. */
+	UFUNCTION(BlueprintPure, Category = Default)
+	FText GetLivesLeft() const;
+};
